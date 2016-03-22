@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WCGTaskViewer</string>
+    <string name="startBtnString">Start</string>
+</resources>
