@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">WCGTaskViewer</string>
     <string name="startBtnString">Start</string>
+
+    <string-array name="WCGAPI_choice">
+        <item>Valid</item>
+        <item>Pending</item>
+
+    </string-array>
+
+
 </resources>
