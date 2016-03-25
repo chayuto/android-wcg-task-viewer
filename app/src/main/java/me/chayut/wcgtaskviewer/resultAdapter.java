@@ -39,11 +39,16 @@ import java.util.List;
         TextView tvName = (TextView) rowView.findViewById(R.id.textViewName);
         TextView textViewDeviceName = (TextView) rowView.findViewById(R.id.textViewDeviceName);
         TextView tvReceivedTime = (TextView) rowView.findViewById(R.id.tvReceivedTime);
+        TextView tvCredits = (TextView) rowView.findViewById(R.id.tvCredits);
+        TextView tvCPUTime = (TextView) rowView.findViewById(R.id.tvCPUTime);
 
         WCGResult mResult = mList.get(position);
         tvName.setText(mResult.getName());
         textViewDeviceName.setText("Device: " + mResult.getDeviceName());
         String receivedTime = mResult.getReceivedTime();
+
+        tvCPUTime.setText(String.format("CPU Time: %.3f",mResult.getCpuTime()));
+        tvCredits.setText(String.format("Credits: %.3f/%.3f",mResult.getClaimedCredit(),mResult.getGrantedCredit()));
         if(receivedTime != null) {
             tvReceivedTime.setText("Received Time: " + receivedTime);
         }

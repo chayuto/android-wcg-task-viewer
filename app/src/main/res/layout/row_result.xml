@@ -20,4 +20,16 @@
         android:layout_height="wrap_content"
         android:text="ReceivedTime"
         android:id="@+id/tvReceivedTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Credits"
+        android:id="@+id/tvCredits" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CPUTime"
+        android:id="@+id/tvCPUTime" />
 </LinearLayout>

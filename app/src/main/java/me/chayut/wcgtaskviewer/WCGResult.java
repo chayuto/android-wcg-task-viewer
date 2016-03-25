@@ -17,10 +17,16 @@ public class WCGResult {
     private int Outcome;
     private String Name;
     private String AppName;
-    private int CpuTime;
+    private Double CpuTime;
     private int ServerState;
     private int ValidateState;
-    private int GrantedCredit;
+    private Double GrantedCredit;
+
+    public Double getClaimedCredit() {
+        return ClaimedCredit;
+    }
+
+    private Double ClaimedCredit;
     private int ElapsedTime;
     private String SentTime;
 
@@ -31,11 +37,14 @@ public class WCGResult {
         try {
             Name = (jObject.getString("Name"));
             DeviceID = (jObject.getInt("DeviceId"));
-            DeviceName=(jObject.getString("DeviceName"));
-            AppName=(jObject.getString("AppName"));
-            Outcome=(jObject.getInt("Outcome"));
+            DeviceName = (jObject.getString("DeviceName"));
+            AppName = (jObject.getString("AppName"));
+            Outcome = (jObject.getInt("Outcome"));
             ValidateState = jObject.getInt("ValidateState");
             ServerState = jObject.getInt("ServerState");
+            CpuTime = jObject.getDouble("CpuTime");
+            ClaimedCredit = jObject.getDouble("ClaimedCredit");
+            GrantedCredit = jObject.getDouble("GrantedCredit");
 
             if(jObject.has("ReceivedTime")) {
                 ReceivedTime=(jObject.getString("ReceivedTime"));
@@ -93,12 +102,12 @@ public class WCGResult {
     }
 
 
-    public int getCpuTime() {
+    public Double getCpuTime() {
         return CpuTime;
     }
 
 
-    public int getGrantedCredit() {
+    public Double getGrantedCredit() {
         return GrantedCredit;
     }
 
