@@ -5,10 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,9 +36,17 @@ import java.util.List;
 
         View rowView = inflater.inflate(R.layout.row_result, parent, false);
 
-        TextView textView = (TextView) rowView.findViewById(R.id.textViewName);
-        textView.setText(mList.get(position).getName());
+        TextView tvName = (TextView) rowView.findViewById(R.id.textViewName);
+        TextView textViewDeviceName = (TextView) rowView.findViewById(R.id.textViewDeviceName);
+        TextView tvReceivedTime = (TextView) rowView.findViewById(R.id.tvReceivedTime);
 
+        WCGResult mResult = mList.get(position);
+        tvName.setText(mResult.getName());
+        textViewDeviceName.setText("Device: " + mResult.getDeviceName());
+        String receivedTime = mResult.getReceivedTime();
+        if(receivedTime != null) {
+            tvReceivedTime.setText("Received Time: " + receivedTime);
+        }
         return rowView;
     }
 

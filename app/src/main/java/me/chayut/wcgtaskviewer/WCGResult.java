@@ -10,8 +10,6 @@ public class WCGResult {
 
     private final static String TAG = "WCGResult";
 
-
-
     private String DeviceName;
     private int ExitStatus;
     private int ModTime;
@@ -20,16 +18,28 @@ public class WCGResult {
     private String Name;
     private String AppName;
     private int CpuTime;
+    private int ServerState;
+    private int ValidateState;
     private int GrantedCredit;
     private int ElapsedTime;
     private String SentTime;
 
+
+    private String ReceivedTime;
+
     public  WCGResult (JSONObject jObject){
         try {
-            this.setName(jObject.getString("Name"));
-            this.setDeviceID(jObject.getInt("DeviceId"));
-            this.setDeviceName(jObject.getString("DeviceName"));
-            this.setAppName(jObject.getString("AppName"));
+            Name = (jObject.getString("Name"));
+            DeviceID = (jObject.getInt("DeviceId"));
+            DeviceName=(jObject.getString("DeviceName"));
+            AppName=(jObject.getString("AppName"));
+            Outcome=(jObject.getInt("Outcome"));
+            ValidateState = jObject.getInt("ValidateState");
+            ServerState = jObject.getInt("ServerState");
+
+            if(jObject.has("ReceivedTime")) {
+                ReceivedTime=(jObject.getString("ReceivedTime"));
+            }
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -41,71 +51,72 @@ public class WCGResult {
         return DeviceID;
     }
 
-    public void setDeviceID(int deviceID) {
-        DeviceID = deviceID;
-    }
-
     private int DeviceID;
 
-    public static String getTAG() {
-        return TAG;
-    }
 
     public String getDeviceName() {
         return DeviceName;
-    }
-
-    public void setDeviceName(String deviceName) {
-        DeviceName = deviceName;
     }
 
     public int getExitStatus() {
         return ExitStatus;
     }
 
-    public void setExitStatus(int exitStatus) {
-        ExitStatus = exitStatus;
-    }
-
     public int getModTime() {
         return ModTime;
-    }
-
-    public void setModTime(int modTime) {
-        ModTime = modTime;
     }
 
     public String getReportDeadLine() {
         return ReportDeadLine;
     }
 
-    public void setReportDeadLine(String reportDeadLine) {
-        ReportDeadLine = reportDeadLine;
-    }
 
     public int getOutcome() {
         return Outcome;
     }
 
-    public void setOutcome(int outcome) {
-        Outcome = outcome;
-    }
+
 
     public String getName() {
         return Name;
     }
 
-    public void setName(String name) {
-        Name = name;
-    }
+
 
     public String getAppName() {
         return AppName;
     }
 
-    public void setAppName(String appName) {
-        AppName = appName;
+
+    public String getReceivedTime() {
+        return ReceivedTime;
     }
 
+
+    public int getCpuTime() {
+        return CpuTime;
+    }
+
+
+    public int getGrantedCredit() {
+        return GrantedCredit;
+    }
+
+
+    public int getElapsedTime() {
+        return ElapsedTime;
+    }
+
+    public String getSentTime() {
+        return SentTime;
+    }
+
+    public int getServerState() {
+        return ServerState;
+    }
+
+    public int getValidateState() {
+        return ValidateState;
+    }
     //endregion
 }

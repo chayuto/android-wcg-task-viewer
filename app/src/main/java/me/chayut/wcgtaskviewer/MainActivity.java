@@ -1,12 +1,14 @@
 package me.chayut.wcgtaskviewer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,18 +30,29 @@ public class MainActivity extends AppCompatActivity {
     // Instantiate the RequestQueue.
     RequestQueue queue ;
 
+    //UI
     private ListView listview;
     private Spinner spinnerResultState;
 
     ArrayList<WCGResult> list = new ArrayList<WCGResult>();
-
     resultAdapter mAdapter;
+
+    //
+    SharedPreferences sharedPref ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPref = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.username_key), "chayut_orapinpatipat");
+        editor.putString(getString(R.string.verifyCode_key), "6be4a4bbf9a57b39ffd296f29e899309");
+        editor.commit();
 
         //UI setup
         listview = (ListView) findViewById(R.id.listView);
@@ -63,20 +76,45 @@ public class MainActivity extends AppCompatActivity {
 
     public void getResultsList (){
 
-        String url ="https://secure.worldcommunitygrid.org/api/members/chayut_orapinpatipat/" +
-                "results?code=6be4a4bbf9a57b39ffd296f29e899309&limit=20&ValidateState=0";
+        String username ="chayut_orapinpatipat";
+        String codekey = "6be4a4bbf9a57b39ffd296f29e899309";
 
+
+        String url = String.format("https://secure.worldcommunitygrid.org/api/members/%s/" +
+                "results?code=%s&limit=20&SortBy=ReceivedTime&ServerState=5",username,codekey);
+        //&ValidateState=0
+
+        int position = spinnerResultState.getSelectedItemPosition();
+
+
+        switch (position){
+            case 0: break;
+            case 1: url = url + "&ValidateState=1"; //valid
+                break;
+            case 2: url = url + "&ValidateState=0"; //pending
+                break;
+            case 3: url = url + "&ValidateState=2"; //invalid
+                break;
+        }
+
+        Log.d(TAG,url);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
 
                         if(response.has("ResultsStatus"))
                             try {
                                 JSONObject ResultStatusJSON = response.getJSONObject("ResultsStatus");
                                 JSONArray ResultJSONA = ResultStatusJSON.getJSONArray("Results");
 
+                                int resultAvailable = ResultStatusJSON.getInt("ResultsAvailable");
+                                int resultReturned = ResultStatusJSON.getInt("ResultsReturned");
+
+                                Toast.makeText(getApplicationContext(),
+                                        String.format("Available: %d, Displayed: %d", resultAvailable,resultReturned),Toast.LENGTH_SHORT).show();
+
+                                list.clear();
                                 for(int n = 0; n < ResultJSONA.length(); n++) {
 
                                     JSONObject resultObject = ResultJSONA.getJSONObject(n);
