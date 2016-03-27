@@ -3,6 +3,8 @@
     package="me.chayut.wcgtaskviewer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -11,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".UserInfoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

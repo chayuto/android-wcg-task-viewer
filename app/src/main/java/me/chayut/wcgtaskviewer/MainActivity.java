@@ -1,7 +1,11 @@
 package me.chayut.wcgtaskviewer;
 
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,25 +38,21 @@ public class MainActivity extends AppCompatActivity {
     private ListView listview;
     private Spinner spinnerResultState;
 
+    private String username,code;
+
     ArrayList<WCGResult> list = new ArrayList<WCGResult>();
     resultAdapter mAdapter;
-
-    //
-    SharedPreferences sharedPref ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPref = getApplicationContext().getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.username_key), "chayut_orapinpatipat");
-        editor.putString(getString(R.string.verifyCode_key), "6be4a4bbf9a57b39ffd296f29e899309");
-        editor.commit();
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra(getString(R.string.username_key));
+        code = intent.getStringExtra(getString(R.string.verifyCode_key));
 
         //UI setup
         listview = (ListView) findViewById(R.id.listView);
@@ -76,12 +76,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void getResultsList (){
 
-        String username ="chayut_orapinpatipat";
-        String codekey = "6be4a4bbf9a57b39ffd296f29e899309";
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+        } else {
+
+            Toast.makeText(getApplicationContext(), "No network connection available.",
+                    Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"No network connection available.");
+            return;
+        }
 
 
         String url = String.format("https://secure.worldcommunitygrid.org/api/members/%s/" +
-                "results?code=%s&limit=20&SortBy=ReceivedTime&ServerState=5",username,codekey);
+                "results?code=%s&limit=20&SortBy=ReceivedTime&ServerState=5",username,code);
         //&ValidateState=0
 
         int position = spinnerResultState.getSelectedItemPosition();
@@ -147,9 +157,6 @@ public class MainActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(jsObjRequest);
     }
-
-
-
 
 
 }

@@ -12,9 +12,9 @@
 
     </string-array>
 
-    <string name="username_key">username_key</string>
-    <string name="verifyCode_key">verifyCode_key</string>
 
+    <string name="verifyCode_key">verifyCode_key</string>
+    <string name="username_key">Username</string>
 
 
 </resources>
