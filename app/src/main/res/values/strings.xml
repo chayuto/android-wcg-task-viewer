@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">WCGTaskViewer</string>
-    <string name="startBtnString">Get Info</string>
+    <string name="app_name">A3Q3WCGTaskViewer</string>
+    <string name="startBtnString">Get Tasks</string>
 
-    <string name="preference_file_key">ajskjansjbgwkqb</string>
+    <string name="preference_file_key">Q2hheXV0T3JhcGlucGF0aXBhdA==</string>
 
     <string-array name="WCGAPI_choice">
         <item>Any</item>

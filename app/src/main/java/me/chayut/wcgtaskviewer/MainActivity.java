@@ -19,11 +19,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
 import java.util.ArrayList;
 
@@ -69,19 +71,31 @@ public class MainActivity extends AppCompatActivity {
         getResultsList();
     }
 
+    public void onUserStatButtonPressed(View view){
+        getUserstats();
+    }
+
     private void ListUpdate(){
 
         listview.setAdapter(mAdapter);
     }
 
-    public void getResultsList (){
-
+    public boolean checkConnectivity (){
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
 
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
         } else {
+            return false;
+        }
+    }
+
+
+    public void getUserstats (){
+
+        if(!checkConnectivity()){
 
             Toast.makeText(getApplicationContext(), "No network connection available.",
                     Toast.LENGTH_SHORT).show();
@@ -89,6 +103,65 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        String url = String.format("https://www.worldcommunitygrid.org/stat/viewMemberInfo.do?userName=%s&format=xml",username);
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        //Log.d(TAG,response);
+
+                        JSONObject jsonObj = null;
+
+                        try {
+                            jsonObj = XML.toJSONObject(response);
+
+                            JSONObject myStat =  jsonObj.getJSONObject("MemberStats").getJSONObject("MemberStat");
+                            Log.d("JSON", myStat.toString());
+
+                            String name = myStat.getString("Name");
+                            String teamID = myStat.getString("TeamId");
+                            JSONObject statTotal = myStat.getJSONObject("StatisticsTotals");
+
+                            int points = statTotal.getInt("Points");
+                            int runTime = statTotal.getInt("RunTime");
+
+                            String outString = String.format( "%s from team %s has contributed WCG Runtime of %d sec (Credits %d points)",name,teamID,runTime,points);
+
+                            Toast.makeText(getApplicationContext(), outString,
+                                    Toast.LENGTH_LONG).show();
+
+                        } catch (JSONException e) {
+                            Log.e("JSON exception", e.getMessage());
+                            e.printStackTrace();
+                        }
+                        
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // handle error response
+                        Toast.makeText(getApplicationContext(),"Error!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(request);
+    }
+
+    public void getResultsList (){
+
+        if(!checkConnectivity()){
+
+            Toast.makeText(getApplicationContext(), "No network connection available.",
+                    Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"No network connection available.");
+            return;
+        }
 
         String url = String.format("https://secure.worldcommunitygrid.org/api/members/%s/" +
                 "results?code=%s&limit=20&SortBy=ReceivedTime&ServerState=5",username,code);
@@ -147,7 +220,9 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+
+                        Toast.makeText(getApplicationContext(),"Error!",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
 

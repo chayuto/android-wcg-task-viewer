@@ -43,10 +43,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
     public void onButtonClicked(View view){
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.username_key),etUsername.getText().toString());
-        editor.putString(getString(R.string.verifyCode_key),etCode.getText().toString());
-        editor.commit();
+        if(cbRemember.isChecked()) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.username_key), etUsername.getText().toString());
+            editor.putString(getString(R.string.verifyCode_key), etCode.getText().toString());
+            editor.commit();
+        }
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(getString(R.string.username_key), etUsername.getText().toString());
